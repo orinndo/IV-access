@@ -1,106 +1,40 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>静脈路の確保（IV Placement） 音声ガイド</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>静脈路の確保（IV Placement）音声ガイド</title>
 <style>
-body{font-family:system-ui,-apple-system,"Hiragino Sans",sans-serif;margin:18px;line-height:1.45;}
-h1{font-size:28px;margin:0 0 10px 0;}
-.note{font-size:12px;color:#666;margin:0 0 16px 0;}
-.panel{border:1px solid #e6e6e6;border-radius:14px;padding:14px;max-width:980px;}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-.tag{font-size:12px;color:#666;background:#f5f5f5;border:1px solid #e6e6e6;border-radius:999px;padding:6px 12px;}
-select{font-size:16px;padding:10px 12px;min-width:320px;flex:1;border-radius:10px;border:1px solid #dcdcdc;}
-.navbtn{font-size:16px;padding:10px 14px;border:1px solid #dcdcdc;background:#fff;border-radius:10px;min-width:86px;}
-.navbtn:disabled{opacity:.35;}
-.label{font-size:12px;color:#666;margin-top:14px;}
-.jp{font-size:26px;font-weight:800;margin:6px 0 14px 0;}
-.en{font-size:18px;margin:6px 0 0 0;}
-.controls{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 8px 0;}
-.btn{font-size:16px;padding:12px 16px;border:1px solid #dcdcdc;background:#fff;border-radius:12px;min-width:170px;}
-.status{font-size:12px;color:#666;margin:6px 0 6px 0;}
-audio{width:100%;margin-top:6px;}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#fff; margin:0; padding:16px; }
+h1 { font-size:24px; margin-bottom:8px; }
+.note { color:#555; font-size:14px; margin-bottom:16px; }
+.card { border:1px solid #ddd; border-radius:12px; padding:16px; }
+.step { font-weight:600; margin-bottom:12px; }
+.jp { font-size:20px; margin:12px 0; }
+.en { font-size:18px; color:#222; margin-bottom:16px; }
+button { padding:12px 16px; font-size:16px; border-radius:10px; border:1px solid #ccc; margin-right:8px; }
+.controls { margin-bottom:12px; }
+audio { width:100%; }
 </style>
 </head>
 <body>
-<h1>静脈路の確保（IV Placement） 音声ガイド</h1>
-<p class="note">※ 必ず GitHub Pages（https://○○.github.io/…）のURLで開いてください。iPhoneでは自動再生できないため、下の再生ボタンを押してください。</p>
+<h1>静脈路の確保（IV Placement）音声ガイド</h1>
+<div class="note">※ GitHub Pages の URL で開いてください（Android / iPhone 対応）</div>
 
-<div class="panel">
-  <div class="row">
-    <span class="tag">ステップ選択</span>
-    <select id="stepSelect"><option value="01">01. この点滴（ルート）は米海軍病院（U.S. Naval Hospital）で入れましたか？</option>
-<option value="02">02. この点滴が造影剤の注入圧に耐えられるか不明なので、安全のため新しく入れ直します。</option>
-<option value="03">03. 上腕に駆血帯を巻いて、血管を確認しますね。</option>
-<option value="04">04. 手を軽く握って、数秒そのままにしてください。</option>
-<option value="05">05. アルコールで消毒します。アルコールでかぶれたり、アレルギーはありますか？</option>
-<option value="06">06. 針を入れるとき、少し押される感じやチクッとする痛みがあるかもしれません。</option>
-<option value="07">07. 腕を動かさないようにしてください。</option>
-<option value="08">08. 今から針を入れます。少しだけチクッとします。</option>
-<option value="09">09. 入ったので、生理食塩水で流して、きちんと使えるか確認しますね。</option>
-<option value="10">10. 問題なさそうです。</option></select>
-    <button class="navbtn" id="prevBtn">← 前</button>
-    <button class="navbtn" id="nextBtn">次 →</button>
-  </div>
-
-  <div class="label">日本語（内容）</div>
+<div class="card">
+  <div class="step" id="stepTitle"></div>
   <div class="jp" id="jpText"></div>
-
-  <div class="label">English (Script)</div>
   <div class="en" id="enText"></div>
 
   <div class="controls">
-    <button class="btn" id="playBtn">▶ 再生 / Play</button>
-    <button class="btn" id="pauseBtn">⏸ 一時停止 / Pause</button>
-    <button class="btn" id="replayBtn">↻ もう一度 / Replay</button>
+    <button onclick="playAudio()">▶ 再生 / Play</button>
+    <button onclick="pauseAudio()">⏸ 一時停止 / Pause</button>
+    <button onclick="replayAudio()">↺ もう一度 / Replay</button>
   </div>
 
-  <div class="status" id="status">待機中 / Ready</div>
-  <audio id="player" controls playsinline preload="metadata"></audio>
-
-  <div class="note">再生されない場合は、下のコントロール（▶）からも再生できます。</div>
+  <audio id="audio" controls></audio>
 </div>
 
-<script src="steps.js?v=20260108104428"></script>
-<script>
-const sel=document.getElementById('stepSelect');
-const jpEl=document.getElementById('jpText');
-const enEl=document.getElementById('enText');
-const player=document.getElementById('player');
-const statusEl=document.getElementById('status');
-const prevBtn=document.getElementById('prevBtn');
-const nextBtn=document.getElementById('nextBtn');
-
-function currentIndex(){ return STEPS.findIndex(s => s.id === sel.value); }
-
-function load(i){
-  if(i < 0) i = 0;
-  if(i >= STEPS.length) i = STEPS.length - 1;
-  const s = STEPS[i];
-  sel.value = s.id;
-  jpEl.textContent = s.jp || "";
-  enEl.textContent = s.en || "";
-  player.src = s.audio;
-  player.currentTime = 0;
-  prevBtn.disabled = (i === 0);
-  nextBtn.disabled = (i === STEPS.length - 1);
-  statusEl.textContent = "待機中 / Ready";
-}
-
-sel.addEventListener('change', () => load(currentIndex()));
-prevBtn.addEventListener('click', () => load(currentIndex() - 1));
-nextBtn.addEventListener('click', () => load(currentIndex() + 1));
-
-document.getElementById('playBtn').addEventListener('click', () => player.play());
-document.getElementById('pauseBtn').addEventListener('click', () => player.pause());
-document.getElementById('replayBtn').addEventListener('click', () => { player.currentTime = 0; player.play(); });
-
-player.addEventListener('play', () => statusEl.textContent = "再生中 / Playing");
-player.addEventListener('pause', () => statusEl.textContent = "一時停止 / Paused");
-player.addEventListener('ended', () => statusEl.textContent = "待機中 / Ready");
-
-load(0);
-</script>
+<script src="steps.js"></script>
 </body>
 </html>
