@@ -1,297 +1,114 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>静脈路の確保（IV Line）音声ガイド</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>静脈路の確保（IV Line Placement）音声ガイド</title>
 <style>
-  :root {
-    --bg:#ffffff; --text:#111; --muted:#666; --border:#e5e7eb; --panel:#f8fafc; --btn:#f1f5f9;
-    --accent:#2563eb;
-  }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Segoe UI", Roboto, "Noto Sans JP", Arial, sans-serif;
-    margin: 18px; line-height: 1.6; color: var(--text); background: var(--bg);
-  }
-  h1 { margin: 0 0 6px; font-size: 22px; }
-  .sub { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
-  .note { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
-  .panel {
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: #fff;
-    padding: 14px;
-    max-width: 860px;
-  }
-  .row { display:flex; gap:10px; flex-wrap: wrap; align-items:center; }
-  .labelpill {
-    display:inline-block; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
-    background: var(--btn); color: var(--text); font-size: 14px;
-  }
-  select {
-    flex: 1 1 420px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 12px;
-    font-size: 16px;
-    background: #fff;
-  }
-  .navbtn {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 9px 14px;
-    font-size: 15px;
-    background: var(--btn);
-    cursor: pointer;
-  }
-  .navbtn:disabled { opacity: .45; cursor: not-allowed; }
-  .divider { height: 10px; }
-  .sec-title { margin: 12px 0 6px; font-size: 13px; color: var(--muted); }
-  .jp {
-    font-size: 22px;
-    font-weight: 700;
-    margin: 0 0 10px;
-  }
-  .en-label { margin: 10px 0 6px; font-size: 13px; color: var(--muted); }
-  .en {
-    font-size: 18px;
-    margin: 0 0 12px;
-  }
-  .btn {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-size: 15px;
-    background: var(--btn);
-    cursor: pointer;
-  }
-  .btn:active { transform: translateY(1px); }
-  .status { margin: 8px 0 6px; font-size: 13px; color: var(--muted); }
-  audio { width: 100%; }
-  .help { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
-  .accent { color: var(--accent); }
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI",sans-serif;
+background:linear-gradient(180deg,#f7fbff,#eef6ff);color:#0f172a;}
+.header{padding:18px 16px 10px;}
+.frame-title{border:2px solid #38bdf8;padding:14px 16px;border-radius:14px;background:#f8fcff;text-align:center;}
+.frame-title h1{margin:0;font-size:20px;}
+.frame-title p{margin:6px 0 0;font-size:14px;color:#475569;}
+.note{font-size:12px;color:#475569;margin:12px 16px;}
+.main{margin:0 16px 24px;padding:16px;background:#fff;border-radius:18px;box-shadow:0 8px 18px rgba(15,23,42,.08);}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+select{flex:1;max-width:100%;font-size:16px;padding:10px 36px 10px 12px;border-radius:12px;border:1px solid #cbd5f5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+button{font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid #cbd5f5;background:#eff6ff;}
+button:active{transform:scale(.98);}
+.label{margin-top:14px;font-size:13px;color:#475569;}
+.jp{font-size:18px;font-weight:600;margin-top:6px;}
+.en{font-size:16px;margin-top:4px;}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+audio{width:100%;margin-top:10px;}
+.status{margin-top:8px;font-size:13px;color:#475569;}
+.hint{margin-top:10px;font-size:12px;color:#64748b;}
 </style>
 </head>
 <body>
-  <h1>静脈路の確保（IV Line）音声ガイド</h1>
-  <div class="sub">※セリフは番号順に並んでいます（01 → 10）。</div>
-  <div class="note">※iPhone / iPad では自動再生できないため、<span class="accent">再生（Play）</span>を押して開始してください。Android / PC でも同様にボタン操作で再生できます。</div>
-
-  <div class="panel">
-    <div class="row">
-      <span class="labelpill">ステップ選択</span>
-      <select id="stepSelect" aria-label="ステップ選択"></select>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="row">
-      <button class="navbtn" id="prevBtn" type="button">← 前</button>
-      <button class="navbtn" id="nextBtn" type="button">次 →</button>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="sec-title">日本語（訳）</div>
-    <div class="jp" id="jpText">—</div>
-
-    <div class="en-label">English (Script)</div>
-    <div class="en" id="enText">—</div>
-
-    <div class="row" style="margin-top: 6px;">
-      <button class="btn" id="playBtn" type="button">▶ 再生 / Play</button>
-      <button class="btn" id="pauseBtn" type="button">⏸ 一時停止 / Pause</button>
-      <button class="btn" id="replayBtn" type="button">↻ もう一度 / Replay</button>
-    </div>
-
-    <div class="status" id="statusText">待機中 / Ready</div>
-
-    <audio id="audio" controls preload="metadata">
-      <source id="srcMp3" src="" type="audio/mpeg">
-      <source id="srcM4a" src="" type="audio/mp4">
-      お使いのブラウザは音声再生に対応していません。
-    </audio>
-
-    <div class="help">再生されない場合は、上のコントロール（▶）からも再生できます。</div>
+<div class="header">
+  <div class="frame-title">
+    <h1>静脈路の確保（IV Line Placement）</h1>
+    <p>English Audio Guide</p>
   </div>
+</div>
+
+<p class="note">※ iPhone / iPad / Android で再生できます。最初は「再生」を押してください。</p>
+
+<div class="main">
+  <div class="row">
+    <select id="sel"></select>
+    <button id="prev">← 前</button>
+    <button id="next">次 →</button>
+  </div>
+
+  <div class="label">日本語（内容）</div>
+  <div class="jp" id="jp"></div>
+
+  <div class="label">English (Script)</div>
+  <div class="en" id="en"></div>
+
+  <div class="controls">
+    <button id="play">▶︎ 再生</button>
+    <button id="pause">⏸ 一時停止</button>
+    <button id="replay">↻ もう一度</button>
+  </div>
+
+  <div class="status" id="status">待機中 / Ready</div>
+  <audio id="player" controls></audio>
+
+  <div class="hint">
+    再生できない場合：消音モード解除、音量、Bluetooth接続を確認してください。
+  </div>
+</div>
 
 <script>
 const STEPS = [
-  {
-    "id": "01",
-    "title": "01. この点滴ルートは、米海軍病院で入れましたか？",
-    "jp": "この点滴ルートは、米海軍病院で入れましたか？",
-    "en": "Was this IV line placed at the U.S. Naval Hospital?",
-    "audio_mp3": "audio/01.mp3",
-    "audio_m4a": "audio/01.m4a"
-  },
-  {
-    "id": "02",
-    "title": "02. この点滴ルートが造影剤注入の圧に耐えられるか確実ではないので、安全のため新しいルートを入れますね。",
-    "jp": "この点滴ルートが造影剤注入の圧に耐えられるか確実ではないので、安全のため新しいルートを入れますね。",
-    "en": "We're not sure if this IV line can withstand the injection pressure, so just to be safe, we'll insert a new one.",
-    "audio_mp3": "audio/02.mp3",
-    "audio_m4a": "audio/02.m4a"
-  },
-  {
-    "id": "03",
-    "title": "03. 上腕に駆血帯を巻きます。血管を確認しますね。",
-    "jp": "上腕に駆血帯を巻きます。血管を確認しますね。",
-    "en": "I'll place a tourniquet on your upper arm. Let me check your veins.",
-    "audio_mp3": "audio/03.mp3",
-    "audio_m4a": "audio/03.m4a"
-  },
-  {
-    "id": "04",
-    "title": "04. こぶしを握って、数秒そのままにしてください。",
-    "jp": "こぶしを握って、数秒そのままにしてください。",
-    "en": "Please make a fist and hold it for a few seconds.",
-    "audio_mp3": "audio/04.mp3",
-    "audio_m4a": "audio/04.m4a"
-  },
-  {
-    "id": "05",
-    "title": "05. アルコールで消毒します。アルコールでアレルギーや皮膚のかぶれはありますか？",
-    "jp": "アルコールで消毒します。アルコールでアレルギーや皮膚のかぶれはありますか？",
-    "en": "I'll clean the area with alcohol. Do you have any allergies or skin reactions to alcohol?",
-    "audio_mp3": "audio/05.mp3",
-    "audio_m4a": "audio/05.m4a"
-  },
-  {
-    "id": "06",
-    "title": "06. 針を入れるとき、少し圧迫感やチクッとした痛みを感じるかもしれません。",
-    "jp": "針を入れるとき、少し圧迫感やチクッとした痛みを感じるかもしれません。",
-    "en": "You might feel a little pressure or sting during the insertion.",
-    "audio_mp3": "audio/06.mp3",
-    "audio_m4a": "audio/06.m4a"
-  },
-  {
-    "id": "07",
-    "title": "07. 腕を動かさないでください。",
-    "jp": "腕を動かさないでください。",
-    "en": "Please keep your arm still.",
-    "audio_mp3": "audio/07.mp3",
-    "audio_m4a": "audio/07.m4a"
-  },
-  {
-    "id": "08",
-    "title": "08. 今から針を刺します。チクッとするかもしれません。",
-    "jp": "今から針を刺します。チクッとするかもしれません。",
-    "en": "I'll insert the needle now. You might feel a quick pinch.",
-    "audio_mp3": "audio/08.mp3",
-    "audio_m4a": "audio/08.m4a"
-  },
-  {
-    "id": "09",
-    "title": "09. 入りました。きちんと流れるか確認のため、生理食塩水でフラッシュしますね。",
-    "jp": "入りました。きちんと流れるか確認のため、生理食塩水でフラッシュしますね。",
-    "en": "It's in. I'll flush it to make sure it's working.",
-    "audio_mp3": "audio/09.mp3",
-    "audio_m4a": "audio/09.m4a"
-  },
-  {
-    "id": "10",
-    "title": "10. 問題なさそうです。",
-    "jp": "問題なさそうです。",
-    "en": "It looks good.",
-    "audio_mp3": "audio/10.mp3",
-    "audio_m4a": "audio/10.m4a"
-  }
+ {preview:"この点滴は米海軍病院で？", jp:"この点滴ルートは米海軍病院で入れましたか？", en:"Was this IV line placed at the U.S. Naval Hospital?"},
+ {preview:"念のため入れ直します…", jp:"この点滴ルートが注入圧に耐えられるか分からないので、念のため新しく入れ直します。", en:"We’re not sure if this IV line can withstand the injection pressure, so just to be safe, we’ll insert a new one."},
+ {preview:"駆血帯を巻きます…", jp:"上腕に駆血帯を巻きます。血管を確認しますね。", en:"I’ll place a tourniquet on your upper arm. Let me check your veins."},
+ {preview:"手を握って…", jp:"手を握って、数秒そのままにしてください。", en:"Please make a fist and hold it for a few seconds."},
+ {preview:"アルコールで消毒…", jp:"アルコールで消毒します。アルコールでかぶれたりアレルギーはありますか？", en:"I’ll clean the area with alcohol. Do you have any allergies or skin reactions to alcohol?"},
+ {preview:"少し圧迫感や…", jp:"入れるときに少し圧迫感やしみる感じがするかもしれません。", en:"You might feel a little pressure or sting during the insertion."},
+ {preview:"腕を動かさないで…", jp:"腕を動かさないでください。", en:"Please keep your arm still."},
+ {preview:"今から針を入れます…", jp:"今から針を入れます。少しチクッとするかもしれません。", en:"I’ll insert the needle now. You might feel a quick pinch."},
+ {preview:"入りました…", jp:"入りました。ちゃんと通っているか確認のためにフラッシュしますね。", en:"It’s in. I’ll flush it to make sure it’s working."},
+ {preview:"問題なく入っています…", jp:"問題なく入っています。", en:"It looks good."}
 ];
 
-const elSelect = document.getElementById('stepSelect');
-const jpText = document.getElementById('jpText');
-const enText = document.getElementById('enText');
-const statusText = document.getElementById('statusText');
-const audio = document.getElementById('audio');
-const srcMp3 = document.getElementById('srcMp3');
-const srcM4a = document.getElementById('srcM4a');
+const sel=document.getElementById('sel'),
+jp=document.getElementById('jp'),
+en=document.getElementById('en'),
+player=document.getElementById('player'),
+status=document.getElementById('status');
 
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const playBtn = document.getElementById('playBtn');
-const pauseBtn = document.getElementById('pauseBtn');
-const replayBtn = document.getElementById('replayBtn');
-
-let currentIndex = 0;
-
-function buildOptions() {
-  elSelect.innerHTML = "";
-  STEPS.forEach((s, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = s.title;
-    elSelect.appendChild(opt);
-  });
-}
-
-function setNavState() {
-  prevBtn.disabled = currentIndex <= 0;
-  nextBtn.disabled = currentIndex >= STEPS.length - 1;
-}
-
-function setStatus(msg) {
-  statusText.textContent = msg;
-}
-
-function loadStep(index, autoplay=false) {
-  currentIndex = Math.max(0, Math.min(STEPS.length - 1, index));
-  const s = STEPS[currentIndex];
-  elSelect.value = String(currentIndex);
-  jpText.textContent = s.jp;
-  enText.textContent = s.en;
-
-  // swap sources (mp3 first for Android/Windows compatibility; m4a as fallback)
-  srcMp3.src = s.audio_mp3;
-  srcM4a.src = s.audio_m4a;
-  audio.load();
-
-  setNavState();
-  setStatus("待機中 / Ready");
-
-  if (autoplay) {
-    // Autoplay is often blocked; user gesture should call play() via button.
-    audio.play().then(() => {
-      setStatus("再生中 / Playing");
-    }).catch(() => {
-      // ignore (autoplay blocked)
-    });
-  }
-}
-
-function play() {
-  audio.play().then(() => setStatus("再生中 / Playing"))
-    .catch(() => setStatus("再生できませんでした（ボタンをもう一度押してください）/ Playback blocked"));
-}
-
-function pause() {
-  audio.pause();
-  setStatus("一時停止 / Paused");
-}
-
-function replay() {
-  audio.currentTime = 0;
-  play();
-}
-
-prevBtn.addEventListener('click', () => loadStep(currentIndex - 1));
-nextBtn.addEventListener('click', () => loadStep(currentIndex + 1));
-elSelect.addEventListener('change', (e) => loadStep(parseInt(e.target.value, 10)));
-
-playBtn.addEventListener('click', play);
-pauseBtn.addEventListener('click', pause);
-replayBtn.addEventListener('click', replay);
-
-audio.addEventListener('ended', () => setStatus("完了 / Finished"));
-audio.addEventListener('pause', () => {
-  if (audio.currentTime > 0 && audio.currentTime < audio.duration) {
-    setStatus("一時停止 / Paused");
-  }
+STEPS.forEach((s,i)=>{
+ const o=document.createElement('option');
+ o.value=i;
+ o.textContent=`${String(i+1).padStart(2,'0')}｜${s.jp}`;
+ sel.appendChild(o);
 });
-audio.addEventListener('play', () => setStatus("再生中 / Playing"));
 
-buildOptions();
-loadStep(0);
+let idx=0;
+function load(i){
+ idx=Math.max(0,Math.min(STEPS.length-1,i));
+ sel.value=idx;
+ jp.textContent=STEPS[idx].jp;
+ en.textContent=STEPS[idx].en;
+ player.src=`audio/step_${String(idx+1).padStart(2,'0')}.m4a`;
+ status.textContent="待機中 / Ready";
+}
+sel.onchange=()=>load(parseInt(sel.value));
+document.getElementById('prev').onclick=()=>load(idx-1);
+document.getElementById('next').onclick=()=>load(idx+1);
+document.getElementById('play').onclick=()=>player.play();
+document.getElementById('pause').onclick=()=>player.pause();
+document.getElementById('replay').onclick=()=>{player.currentTime=0;player.play();}
+player.onplay=()=>status.textContent="再生中 / Playing";
+player.onpause=()=>status.textContent="一時停止 / Paused";
+player.onended=()=>status.textContent="待機中 / Ready";
+load(0);
 </script>
 </body>
 </html>
